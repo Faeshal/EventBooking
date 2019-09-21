@@ -5,9 +5,33 @@ const { buildSchema } = require("graphql");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const app = express();
-const PORT = 8080;
 const Event = require("./models/events");
 const User = require("./models/user");
+
+const events = eventIds => {
+  return Event.find({ _id: { $in: eventIds } })
+    .then(events => {
+      return events.map(event => {
+        return {
+          ...event._doc,
+          creator: user.binds(this, event.creator)
+        };
+      });
+    })
+    .catch(err => {
+      throw err;
+    });
+};
+
+const user = userId => {
+  return User.findById(userId)
+    .then(user => {
+      return { ...user._doc };
+    })
+    .catch(err => {
+      throw err;
+    });
+};
 
 app.use(bodyParser.json());
 
@@ -26,12 +50,14 @@ app.use(
           description:String!
           price:Float!
           date:String!
+          creator:User!
         }
         
         type User{
           _id:ID!
           email:String!
           password:String
+          createdEvents:[Event!]!
         }
 
         input EventInput {
@@ -65,7 +91,10 @@ app.use(
         return Event.find()
           .then(events => {
             return events.map(event => {
-              return { ...event._doc };
+              return {
+                ...event._doc,
+                creator: user.bind(this, event._doc.creator)
+              };
             });
           })
           .catch(err => {
@@ -136,7 +165,7 @@ mongoose
     useNewUrlParser: true
   })
   .then(() => {
-    app.listen(PORT);
+    app.listen(process.env.PORT);
     console.log("Web Server is Running");
   })
   .catch(err => {
