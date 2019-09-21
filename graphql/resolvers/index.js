@@ -61,12 +61,12 @@ module.exports = {
         date: new Date(event._doc.date).toISOString(),
         creator: user.bind(this, event._doc.creator)
       };
-      const user = await User.findById("5d84c23f2194890cdc1c9cca");
-      if (!user) {
+      const creator = await User.findById("5d84c23f2194890cdc1c9cca");
+      if (!creator) {
         throw new Eror("User Not Found");
       }
-      user.createdEvents.push(event);
-      await user.save();
+      creator.createdEvents.push(event);
+      await creator.save();
 
       return createdEvent;
     } catch (err) {
