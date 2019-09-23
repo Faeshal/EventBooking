@@ -2,11 +2,12 @@ const bcrypt = require("bcryptjs");
 const Event = require("../../models/events");
 const User = require("../../models/user");
 const Booking = require("../../models/booking");
+const { dateToString } = require("../../helpers/date.js");
 
 const events = async eventIds => {
   try {
     const events = await Event.find({ _id: { $in: eventIds } });
-    events.map(event => {
+    return events.map(event => {
       return {
         ...event._doc,
         _id: event.id,
@@ -14,7 +15,6 @@ const events = async eventIds => {
         creator: user.bind(this, event.creator)
       };
     });
-    return events;
   } catch (err) {
     throw err;
   }
@@ -71,8 +71,8 @@ module.exports = {
           _id: booking.id,
           user: user.bind(this, booking._doc.user),
           event: singleEvent.bind(this, booking._doc.event),
-          createdAt: new Date(booking._doc.createdAt).toISOString(),
-          updatedAt: new Date(booking._doc.updatedAt).toISOString()
+          createdAt: dateToString(booking._doc.createdAt),
+          updatedAt: dateToString(booking._doc.updatedAt)
         };
       });
     } catch (err) {
@@ -85,7 +85,7 @@ module.exports = {
       description: args.eventInput.description,
       price: +args.eventInput.price,
       date: new Date(args.eventInput.date),
-      creator: "5c0fbd06c816781c518e4f3e"
+      creator: "5d84c22b2194890cdc1c9cc9"
     });
     let createdEvent;
     try {
@@ -96,7 +96,7 @@ module.exports = {
         date: new Date(event._doc.date).toISOString(),
         creator: user.bind(this, result._doc.creator)
       };
-      const creator = await User.findById("5c0fbd06c816781c518e4f3e");
+      const creator = await User.findById("5d84c22b2194890cdc1c9cc9");
 
       if (!creator) {
         throw new Error("User not found.");
@@ -142,8 +142,8 @@ module.exports = {
       _id: result.id,
       user: user.bind(this, booking._doc.user),
       event: singleEvent.bind(this, booking._doc.event),
-      createdAt: new Date(result._doc.createdAt).toISOString(),
-      updatedAt: new Date(result._doc.updatedAt).toISOString()
+      createdAt: dateToString(result._doc.createdAt),
+      updatedAt: dateToString(result._doc.updatedAt)
     };
   },
   cancelBooking: async args => {
