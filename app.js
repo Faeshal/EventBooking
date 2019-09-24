@@ -5,12 +5,19 @@ const graphqlHttp = require("express-graphql");
 const mongoose = require("mongoose");
 const graphQLSchema = require("./graphql/schema/index");
 const graphQLResolvers = require("./graphql/resolvers/index");
+const expressPlayground = require("graphql-playground-middleware-express")
+  .default;
+const isAuth = require("./middleware/is-auth");
 
 app.use(bodyParser.json());
 
 app.get("/", (req, res, next) => {
   res.send("Hello From Express");
 });
+
+app.get("/playground", expressPlayground({ endpoint: "/graphql" }));
+
+app.use(isAuth);
 
 app.use(
   "/graphql",
