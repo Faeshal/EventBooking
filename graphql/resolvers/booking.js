@@ -1,17 +1,6 @@
 const Booking = require("../../models/booking");
-const { dateToString } = require("../../helpers/date.js");
-const { singleEvent, user } = require("../resolvers/merge");
-
-const transformBooking = booking => {
-  return {
-    ...booking._doc,
-    _id: booking.id,
-    user: user.bind(this, booking._doc.user),
-    event: singleEvent.bind(this, booking._doc.event),
-    createdAt: dateToString(booking._doc.createdAt),
-    updatedAt: dateToString(booking._doc.updatedAt)
-  };
-};
+const Event = require("../../models/events");
+const { transformBooking, transformEvent } = require("../resolvers/merge");
 
 module.exports = {
   bookings: async () => {
