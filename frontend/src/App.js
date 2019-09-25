@@ -11,15 +11,17 @@ class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <Navbar />
-        <div className="container text-center mt-5 ">
-          <Switch>
-            <Redirect from="/" to="/auth" exact />
-            <Route path="/auth" component={Auth} />
-            <Route path="/events" component={Events} />
-            <Route path="/bookings" component={Bookings} />
-          </Switch>
-        </div>
+        <React.Fragment>
+          <Navbar />
+          <div className="container text-center mt-5">
+            <Switch>
+              <Redirect from="/" to="/auth" exact />
+              <Route path="/auth" component={Auth} />
+              <Route path="/events" component={Events} />
+              <Route path="/bookings" component={Bookings} />
+            </Switch>
+          </div>
+        </React.Fragment>
       </BrowserRouter>
     );
   }
