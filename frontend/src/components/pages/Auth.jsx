@@ -1,11 +1,21 @@
 import React, { Component } from "react";
 
 class Auth extends Component {
+  state = {
+    isLogin: true
+  };
+
   constructor(props) {
     super(props);
     this.emailEl = React.createRef();
     this.passwordEl = React.createRef();
   }
+
+  switchModeHandler = () => {
+    this.setState(prevState => {
+      return { isLogin: !prevState.isLogin };
+    });
+  };
 
   submitHandler = event => {
     event.preventDefault();
@@ -15,17 +25,32 @@ class Auth extends Component {
       return;
     }
 
-    // QUERY GRAPQL
-    const requestBody = {
+    // QUERY LOGIN
+    let requestBody = {
       query: `
-        mutation{
-          createUser(userInput:{email:"${email}",password:"${password}"}){
-            _id
-            email
-          }
+      query{
+        login(email:"${email}",password:"${password}"){
+          userId
+          token
+          tokenExpiration
         }
+      }
       `
     };
+
+    if (!this.state.isLogin) {
+      // QUERY SIGNUP GRAPQL
+      requestBody = {
+        query: `
+          mutation{
+            createUser(userInput:{email:"${email}",password:"${password}"}){
+              _id
+              email
+            }
+          }
+        `
+      };
+    }
 
     fetch("http://localhost:8000/graphql", {
       method: "POST",
@@ -80,15 +105,14 @@ class Auth extends Component {
                   type="submit"
                   className="btn btn-lg btn-outline-success mt-2 mr-4"
                 >
-                  Signup
+                  Submit
                 </button>
-                <button className="btn btn-lg btn-outline-primary mt-2 ml-4">
-                  <a
-                    href="/signup"
-                    style={{ textDecoration: "none", color: "currentColor" }}
-                  >
-                    Login
-                  </a>
+                <button
+                  className="btn btn-lg btn-outline-primary mt-2 ml-4"
+                  onClick={this.switchModeHandler}
+                  type="button"
+                >
+                  Switch To {this.state.isLogin ? "Signup" : "Login"}
                 </button>
               </div>
             </form>
