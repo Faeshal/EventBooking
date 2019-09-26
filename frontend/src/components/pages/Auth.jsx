@@ -1,9 +1,12 @@
 import React, { Component } from "react";
+import AuthContext from "../auth-context";
 
 class Auth extends Component {
   state = {
     isLogin: true
   };
+
+  static contextType = AuthContext;
 
   constructor(props) {
     super(props);
@@ -21,29 +24,28 @@ class Auth extends Component {
     event.preventDefault();
     const email = this.emailEl.current.value;
     const password = this.passwordEl.current.value;
-    if (email.trim().lenght === 0 || password.trim().lenght === 0) {
+
+    if (email.trim().length === 0 || password.trim().length === 0) {
       return;
     }
 
-    // QUERY LOGIN
     let requestBody = {
       query: `
-      query{
-        login(email:"${email}",password:"${password}"){
-          userId
-          token
-          tokenExpiration
+        query {
+          login(email: "${email}", password: "${password}") {
+            userId
+            token
+            tokenExpiration
+          }
         }
-      }
       `
     };
 
     if (!this.state.isLogin) {
-      // QUERY SIGNUP GRAPQL
       requestBody = {
         query: `
-          mutation{
-            createUser(userInput:{email:"${email}",password:"${password}"}){
+          mutation {
+            createUser(userInput: {email: "${email}", password: "${password}"}) {
               _id
               email
             }
@@ -61,12 +63,18 @@ class Auth extends Component {
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
-          throw new Error("Failed");
+          throw new Error("Failed!");
         }
         return res.json();
       })
       .then(resData => {
-        console.log(resData);
+        if (resData.data.login.token) {
+          this.context.login(
+            resData.data.login.token,
+            resData.data.login.userId,
+            resData.data.login.tokenExpiration
+          );
+        }
       })
       .catch(err => {
         console.log(err);
