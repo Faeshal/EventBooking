@@ -191,26 +191,21 @@ class Events extends Component {
           </Modal>
         )}
         {this.context.token && (
-          <div className="row text-center">
-            <div className="col-sm-12">
-              <h2>Events Page</h2>
-              <hr />
-              <h5 className="mt-4 mb-3">Share Your Event!</h5>
-              <button
-                onClick={this.startCreateEventHandler}
-                className="btn btn-primary font-weight-bold"
-                data-toggle="modal"
-                data-target="#exampleModal"
-              >
-                CREATE
-              </button>
-            </div>
+          <div className="col-sm-6 mx-auto border border-dark mb-4 p-2">
+            <h5 className="mt-4 mb-3">Share Your Event!</h5>
+            <button
+              onClick={this.startCreateEventHandler}
+              className="btn btn-primary font-weight-bold mb-4"
+              data-toggle="modal"
+              data-target="#exampleModal"
+            >
+              CREATE
+            </button>
           </div>
         )}
-        <div className="col-sm-12 text-center">
-          <h4 className="font-weight-bold">Events Explore</h4>
-          <hr />
-        </div>
+
+        <hr />
+        <h4 className="mt-4">Events Explore</h4>
         <div className="col-sm-7 mx-auto mt-4">{eventList}</div>
       </React.Fragment>
     );
