@@ -4,7 +4,8 @@ import AuthContext from "../auth-context";
 
 class Events extends Component {
   state = {
-    creating: false
+    creating: false,
+    events: []
   };
 
   static contextType = AuthContext;
@@ -15,6 +16,10 @@ class Events extends Component {
     this.priceElRef = React.createRef();
     this.dateElRef = React.createRef();
     this.descriptionElRef = React.createRef();
+  }
+
+  componentDidMount() {
+    this.fetchEvents();
   }
 
   startCreateEventHandler = () => {
@@ -79,7 +84,7 @@ class Events extends Component {
         return res.json();
       })
       .then(resData => {
-        console.log(resData);
+        this.fetchEvents();
       })
       .catch(err => {
         console.log(err);
@@ -89,7 +94,51 @@ class Events extends Component {
     this.setState({ creating: false });
   };
 
+  fetchEvents() {
+    const requestBody = {
+      query: `
+          query {
+            events {
+              _id
+              title
+            }
+          }
+        `
+    };
+
+    fetch("http://localhost:8000/graphql", {
+      method: "POST",
+      body: JSON.stringify(requestBody),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error("Failed!");
+        }
+        return res.json();
+      })
+      .then(resData => {
+        const events = resData.data.events;
+        this.setState({ events: events });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
   render() {
+    const eventList = this.state.events.map(event => {
+      return (
+        <div className="card border border-primary mt-3">
+          <div className="card-body text-center text-dark" key={event._id}>
+            {event.title}
+          </div>
+        </div>
+      );
+    });
+
     return (
       <React.Fragment>
         {this.state.creating && (
@@ -158,6 +207,11 @@ class Events extends Component {
             </div>
           </div>
         )}
+        <div className="col-sm-12 text-center">
+          <h4 className="font-weight-bold">Events Explore</h4>
+          <hr />
+        </div>
+        <div className="col-sm-7 mx-auto mt-4">{eventList}</div>
       </React.Fragment>
     );
   }
