@@ -42,11 +42,11 @@ class App extends Component {
                   <Redirect from="/auth" to="/events" exact />
                 )}
                 {!this.state.token && <Route path="/auth" component={Auth} />}
-                {!this.state.token && <Redirect to="/auth" exact />}
+                <Route path="/events" component={Events} />
                 {this.state.token && (
                   <Route path="/bookings" component={Bookings} />
                 )}
-                <Route path="/events" component={Events} />
+                {!this.state.token && <Redirect to="/auth" exact />}
               </Switch>
             </div>
           </AuthContext.Provider>

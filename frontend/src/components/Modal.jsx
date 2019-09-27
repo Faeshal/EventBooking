@@ -41,6 +41,7 @@ const Modal = props => (
               onClick={props.onConfirm}
               type="button"
               className="btn btn-primary"
+              data-dismiss="modal"
             >
               Confirm
             </button>

@@ -93,20 +93,18 @@ class Auth extends Component {
                 <input
                   type="email"
                   className="form-control form-control-lg"
-                  placeholder="faeshal@mail.com"
                   id="email"
                   ref={this.emailEl}
-                  value="faeshal@mail.com"
+                  defaultValue="faeshal@mail.com"
                 />
               </div>
               <div className="form-group">
                 <input
                   type="password"
                   className="form-control form-control-lg"
-                  placeholder="Password"
+                  defaultValue="faeshal"
                   id="faeshal"
                   ref={this.passwordEl}
-                  value="faeshal"
                 />
               </div>
               <br />
