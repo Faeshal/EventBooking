@@ -27,7 +27,38 @@ class Events extends Component {
             onConfirm={this.modalConfirmHandler}
             onCancel={this.modalCancelHandler}
           >
-            <p>Modal Content</p>
+            <form>
+              <div className="form-group">
+                <label htmlFor="title ">Title</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="title"
+                  placeholder="Input Title"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="price">Price</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="price"
+                  placeholder="Input Price"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="date text-left">Date</label>
+                <input type="date" className="form-control" id="date" />
+              </div>
+              <div className="form-group">
+                <label htmlFor="description text-left">Descriptrion</label>
+                <textarea
+                  className="w-100"
+                  id="description"
+                  rows="3"
+                ></textarea>
+              </div>
+            </form>
           </Modal>
         )}
         <div className="row text-center">
