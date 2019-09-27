@@ -37,16 +37,16 @@ class App extends Component {
             <Navbar />
             <div className="container text-center mt-5">
               <Switch>
-                {!this.state.token && <Redirect from="/" to="/auth" exact />}
                 {this.state.token && <Redirect from="/" to="/events" exact />}
                 {this.state.token && (
                   <Redirect from="/auth" to="/events" exact />
                 )}
                 {!this.state.token && <Route path="/auth" component={Auth} />}
-                <Route path="/events" component={Events} />
+                {!this.state.token && <Redirect to="/auth" exact />}
                 {this.state.token && (
                   <Route path="/bookings" component={Bookings} />
                 )}
+                <Route path="/events" component={Events} />
               </Switch>
             </div>
           </AuthContext.Provider>

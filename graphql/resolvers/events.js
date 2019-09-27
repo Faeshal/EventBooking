@@ -4,6 +4,7 @@ const { transformEvent } = require("../resolvers/merge");
 
 module.exports = {
   events: async () => {
+    w;
     try {
       const events = await Event.find();
       return events.map(event => {

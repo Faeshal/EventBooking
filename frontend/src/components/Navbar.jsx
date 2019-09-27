@@ -32,10 +32,21 @@ const Navbar = props => (
               <NavLink to="/events" className="nav-item nav-link">
                 Events
               </NavLink>
+
               {context.token && (
-                <NavLink to="/bookings" className="nav-item nav-link">
-                  Booking
-                </NavLink>
+                <React.Fragment>
+                  <NavLink to="/bookings" className="nav-item nav-link">
+                    Booking
+                  </NavLink>
+                  <ul className="navbar-nav mr-auto">
+                    <button
+                      onClick={context.logout}
+                      className=" text-white ml-5 mr-auto btn btn-sm btn-danger nav-item nav-link"
+                    >
+                      Logout
+                    </button>
+                  </ul>
+                </React.Fragment>
               )}
             </div>
           </div>

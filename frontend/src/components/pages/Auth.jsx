@@ -93,9 +93,10 @@ class Auth extends Component {
                 <input
                   type="email"
                   className="form-control form-control-lg"
-                  placeholder="Email"
+                  placeholder="faeshal@mail.com"
                   id="email"
                   ref={this.emailEl}
+                  value="faeshal@mail.com"
                 />
               </div>
               <div className="form-group">
@@ -103,8 +104,9 @@ class Auth extends Component {
                   type="password"
                   className="form-control form-control-lg"
                   placeholder="Password"
-                  id="password"
+                  id="faeshal"
                   ref={this.passwordEl}
+                  value="faeshal"
                 />
               </div>
               <br />
