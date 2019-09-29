@@ -1,30 +1,25 @@
 const express = require("express");
-const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const graphqlHttp = require("express-graphql");
 const mongoose = require("mongoose");
-const graphQLSchema = require("./graphql/schema/index");
-const graphQLResolvers = require("./graphql/resolvers/index");
-const expressPlayground = require("graphql-playground-middleware-express")
-  .default;
+
+const graphQlSchema = require("./graphql/schema/index");
+const graphQlResolvers = require("./graphql/resolvers/index");
 const isAuth = require("./middleware/is-auth");
+const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
-app.get("/", (req, res, next) => {
-  res.send("Hello From Express");
-});
-
-app.get("/playground", expressPlayground({ endpoint: "/graphql" }));
 
 app.use(isAuth);
 
 app.use(
   "/graphql",
   graphqlHttp({
-    schema: graphQLSchema,
-    rootValue: graphQLResolvers
+    schema: graphQlSchema,
+    rootValue: graphQlResolvers,
+    graphiql: true
   })
 );
 

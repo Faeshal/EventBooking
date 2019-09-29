@@ -1,6 +1,6 @@
-const Event = require("../../models/events");
-const User = require("../../models/user");
-const { dateToString } = require("../../helpers/date");
+const Event = require('../../models/event');
+const User = require('../../models/user');
+const { dateToString } = require('../../helpers/date');
 
 const events = async eventIds => {
   try {
@@ -55,8 +55,9 @@ const transformBooking = booking => {
   };
 };
 
-// exports.events = events;
-// exports.user = user;
-// exports.singleEvent = singleEvent;
 exports.transformEvent = transformEvent;
 exports.transformBooking = transformBooking;
+
+// exports.user = user;
+// exports.events = events;
+// exports.singleEvent = singleEvent;

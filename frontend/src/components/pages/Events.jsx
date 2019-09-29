@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Modal from "../Modal";
 import AuthContext from "../auth-context";
+import EventList from "../pages/EventList";
 
 class Events extends Component {
   state = {
@@ -51,19 +52,15 @@ class Events extends Component {
 
     const requestBody = {
       query: `
-          mutation {
-            createEvent(eventInput: {title: "${title}", description:"${description}", price: ${price}, date:"${date}"}) {
-              _id
-              title
-              description
-              date
-              price
-              creator{
-                _id
-                email
-              }  
-            }
+        mutation {
+          createEvent(eventInput: {title: "${title}", description: "${description}", price: ${price}, date: "${date}"}) {
+            _id
+            title
+            description
+            date
+            price
           }
+        }
         `
     };
 
@@ -97,12 +94,19 @@ class Events extends Component {
   fetchEvents() {
     const requestBody = {
       query: `
-          query {
-            events {
+        query {
+          events {
+            _id
+            title
+            description
+            date
+            price
+            creator {
               _id
-              title
+              email
             }
-          }
+         }
+      }
         `
     };
 
@@ -129,16 +133,6 @@ class Events extends Component {
   }
 
   render() {
-    const eventList = this.state.events.map(event => {
-      return (
-        <div className="card border border-primary mt-3">
-          <div className="card-body text-center text-dark" key={event._id}>
-            {event.title}
-          </div>
-        </div>
-      );
-    });
-
     return (
       <React.Fragment>
         {this.state.creating && (
@@ -204,9 +198,10 @@ class Events extends Component {
           </div>
         )}
 
-        <hr />
-        <h4 className="mt-4">Events Explore</h4>
-        <div className="col-sm-7 mx-auto mt-4">{eventList}</div>
+        <EventList
+          events={this.state.events}
+          authUserId={this.context.userId}
+        />
       </React.Fragment>
     );
   }
