@@ -1,7 +1,9 @@
-import React from "react";
-import EventItem from "../pages/EventItem";
+import React from 'react';
 
-const EventList = props => {
+import EventItem from './EventItem/EventItem';
+import './EventList.css';
+
+const eventList = props => {
   const events = props.events.map(event => {
     return (
       <EventItem
@@ -16,12 +18,8 @@ const EventList = props => {
       />
     );
   });
-  return (
-    <div>
-      <h4 className="mt-4">Events Explore</h4>
-      <div className="col-sm-7 mx-auto mt-4">{events}</div>
-    </div>
-  );
+
+  return <ul className="event__list">{events}</ul>;
 };
 
-export default EventList;
+export default eventList;

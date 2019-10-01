@@ -43,7 +43,7 @@ const Modal = props => (
               className="btn btn-primary"
               data-dismiss="modal"
             >
-              Confirm
+              {props.confirmText}
             </button>
           )}
         </div>

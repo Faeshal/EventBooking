@@ -1,10 +1,13 @@
-import React, { Component } from "react";
-import Modal from "../Modal";
-import AuthContext from "../auth-context";
-import EventList from "../pages/EventList";
-import Spinner from "../Spinner";
+import React, { Component } from 'react';
 
-class Events extends Component {
+import Modal from '../components/Modal/Modal';
+import Backdrop from '../components/Backdrop/Backdrop';
+import EventList from '../components/Events/EventList/EventList';
+import Spinner from '../components/Spinner/Spinner';
+import AuthContext from '../context/auth-context';
+import './Events.css';
+
+class EventsPage extends Component {
   state = {
     creating: false,
     events: [],
@@ -46,33 +49,36 @@ class Events extends Component {
       return;
     }
 
+    const event = { title, price, date, description };
+    console.log(event);
+
     const requestBody = {
       query: `
-        mutation {
-          createEvent(eventInput: {title: "${title}", description: "${description}", price: ${price}, date: "${date}"}) {
-            _id
-            title
-            description
-            date
-            price
+          mutation {
+            createEvent(eventInput: {title: "${title}", description: "${description}", price: ${price}, date: "${date}"}) {
+              _id
+              title
+              description
+              date
+              price
+            }
           }
-        }
         `
     };
 
     const token = this.context.token;
 
-    fetch("http://localhost:8000/graphql", {
-      method: "POST",
+    fetch('http://localhost:8000/graphql', {
+      method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
       }
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
-          throw new Error("Failed!");
+          throw new Error('Failed!');
         }
         return res.json();
       })
@@ -96,6 +102,7 @@ class Events extends Component {
         console.log(err);
       });
   };
+
   modalCancelHandler = () => {
     this.setState({ creating: false, selectedEvent: null });
   };
@@ -104,32 +111,32 @@ class Events extends Component {
     this.setState({ isLoading: true });
     const requestBody = {
       query: `
-        query {
-          events {
-            _id
-            title
-            description
-            date
-            price
-            creator {
+          query {
+            events {
               _id
-              email
+              title
+              description
+              date
+              price
+              creator {
+                _id
+                email
+              }
             }
-         }
-      }
+          }
         `
     };
 
-    fetch("http://localhost:8000/graphql", {
-      method: "POST",
+    fetch('http://localhost:8000/graphql', {
+      method: 'POST',
       body: JSON.stringify(requestBody),
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json'
       }
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
-          throw new Error("Failed!");
+          throw new Error('Failed!');
         }
         return res.json();
       })
@@ -155,52 +162,36 @@ class Events extends Component {
   render() {
     return (
       <React.Fragment>
+        {(this.state.creating || this.state.selectedEvent) && <Backdrop />}
         {this.state.creating && (
           <Modal
+            title="Add Event"
             canCancel
             canConfirm
-            onConfirm={this.modalConfirmHandler}
             onCancel={this.modalCancelHandler}
+            onConfirm={this.modalConfirmHandler}
             confirmText="Confirm"
           >
             <form>
-              <div className="form-group">
-                <label htmlFor="title ">Title</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  placeholder="Input Title"
-                  ref={this.titleElRef}
-                />
+              <div className="form-control">
+                <label htmlFor="title">Title</label>
+                <input type="text" id="title" ref={this.titleElRef} />
               </div>
-              <div className="form-group">
+              <div className="form-control">
                 <label htmlFor="price">Price</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="price"
-                  placeholder="Input Price"
-                  ref={this.priceElRef}
-                />
+                <input type="number" id="price" ref={this.priceElRef} />
               </div>
-              <div className="form-group">
-                <label htmlFor="date text-left">Date</label>
-                <input
-                  type="datetime-local"
-                  className="form-control"
-                  id="date"
-                  ref={this.dateElRef}
-                />
+              <div className="form-control">
+                <label htmlFor="date">Date</label>
+                <input type="datetime-local" id="date" ref={this.dateElRef} />
               </div>
-              <div className="form-group">
-                <label htmlFor="description text-left">Descriptrion</label>
+              <div className="form-control">
+                <label htmlFor="description">Description</label>
                 <textarea
-                  className="w-100"
                   id="description"
-                  rows="3"
+                  rows="4"
                   ref={this.descriptionElRef}
-                ></textarea>
+                />
               </div>
             </form>
           </Modal>
@@ -215,10 +206,10 @@ class Events extends Component {
             confirmText="Book"
           >
             <h1>{this.state.selectedEvent.title}</h1>
-            <h2>${this.state.selectedEvent.price}</h2>
-            <h3>
+            <h2>
+              ${this.state.selectedEvent.price} -{' '}
               {new Date(this.state.selectedEvent.date).toLocaleDateString()}
-            </h3>
+            </h2>
             <p>{this.state.selectedEvent.description}</p>
           </Modal>
         )}
@@ -244,4 +235,4 @@ class Events extends Component {
   }
 }
 
-export default Events;
+export default EventsPage;
