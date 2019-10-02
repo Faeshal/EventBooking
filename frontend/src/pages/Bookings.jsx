@@ -101,7 +101,7 @@ class BookingsPage extends Component {
   render() {
     return (
       <React.Fragment>
-        <h2>Booking List</h2>
+        <h2 style={{ textAlign: "center" }}>Booking List</h2>
         {this.state.isLoading ? (
           <Spinner />
         ) : (
