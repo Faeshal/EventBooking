@@ -6,7 +6,7 @@ const { transformEvent } = require("./merge");
 module.exports = {
   events: async () => {
     try {
-      const events = await Event.find();
+      const events = await Event.find().sort({ _id: -1 });
       return events.map(event => {
         return transformEvent(event);
       });
